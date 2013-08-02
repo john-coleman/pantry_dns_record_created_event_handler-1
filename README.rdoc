@@ -1,0 +1,3 @@
+== DND booted Event Handler
+
+This daemon captures and event from SQS and uses data in the event to update the pantry data store
