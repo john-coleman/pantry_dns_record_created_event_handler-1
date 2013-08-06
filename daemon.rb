@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 require 'rubygems'
 require 'daemons'
-require_relative '../common/subscriber'
-require_relative '../common/config'
+require 'common/subscriber'
+require 'common/config'
 require_relative 'dns_record_created_event_handler'
 
 THIS_FILE = File.symlink?(__FILE__) ? File.readlink(__FILE__) : __FILE__
