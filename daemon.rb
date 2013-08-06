@@ -3,7 +3,7 @@ require 'rubygems'
 require 'daemons'
 require 'common/subscriber'
 require 'common/config'
-require_relative 'dns_record_created_event_handler'
+require_relative 'dns_record_created_event_handler/dns_record_created_event_handler'
 
 THIS_FILE = File.symlink?(__FILE__) ? File.readlink(__FILE__) : __FILE__
 config = Daemons::Config.new(File.expand_path(File.join(File.dirname(THIS_FILE),"config","daemon.yml")))
