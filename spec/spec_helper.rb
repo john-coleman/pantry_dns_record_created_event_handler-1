@@ -1,5 +1,5 @@
 require 'rspec/fire'
-require 'AWS'
+require 'aws-sdk'
 
 AWS.config :access_key_id=>"test", :secret_access_key=>"test"
 AWS.stub!
