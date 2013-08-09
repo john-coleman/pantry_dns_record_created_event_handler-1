@@ -1,5 +1,6 @@
 require 'rspec/fire'
 require 'aws-sdk'
+require 'webmock/rspec'
 
 AWS.config :access_key_id=>"test", :secret_access_key=>"test"
 AWS.stub!
