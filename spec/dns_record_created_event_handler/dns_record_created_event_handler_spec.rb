@@ -34,7 +34,7 @@ describe Daemons::DnsRecordCreatedEventHandler do
       end
     end
 
-    context "HTTP200" do
+    context "HTTP500" do
       it "Receives an incorrect SQS message and errors" do
        WebMock.stub_request(:put, "http://some.url/aws/ec2_instances/1").
          with(:body => "{\"joined\":true}",
