@@ -1,33 +1,47 @@
 require 'spec_helper'
 require_relative  "../../dns_record_created_event_handler/dns_record_created_event_handler"
 describe Daemons::DnsRecordCreatedEventHandler do
-  subject { Daemons::DnsRecordCreatedEventHandler.new() }
-
-  let(:good_message_hash) {
+  let(:config){
     {
-      "Message"=>{
-        "request_id"=>1,
-        "instance_id"=>"i-f4819cb9"
+      "pantry" => {
+        "api_key" => "some_api_key",
+        "request_timeout" => 10,
+        "url" => "http://some.url"
       }
     }
   }
-  let(:good_message_json) { good_message_hash.to_json }
-  let(:good_payload_json) { good_message_json["Message"].to_json }
-  let(:url) { "some_url" }
-  let(:api_key) { "some_api_key"}
-  let(:timeout) { 10 }
+  let(:good_message_hash) {
+    {
+      "pantry_request_id" => 1,
+      "instance_id" => "i-f4819cb9"
+    }
+  }
 
-  describe "#update_instance_joined_status" do
-    it "Updates the instance join to domain status from a good message" do
-      expect{subject.update_instance_joined_status(url,good_payload_json,api_key,timeout)}.not_to be false
-    end
-  end
+  subject { Daemons::DnsRecordCreatedEventHandler.new(config) }
 
   describe "#handle_message" do
-    it "Receives a correct SQS message and proceeds" do
-      expect{subject.handle_message(good_message_json)}.not_to be false
+    before(:each) do
+      WebMock.reset!
     end
+
+    context "HTTP200" do
+      it "Receives a correct SQS message and proceeds" do
+       WebMock.stub_request(:put, "http://some.url/aws/ec2_instances/1").
+         with(:body => "{\"joined\":true}",
+              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Content-Length'=>'15', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby', 'X-Auth-Token'=>'some_api_key'}).
+         to_return(:status => 200, :body => "", :headers => {})
+        expect(subject.handle_message(good_message_hash).code).to be 200
+      end
+    end
+
+    context "HTTP500" do
+      it "Receives an incorrect SQS message and errors" do
+       WebMock.stub_request(:put, "http://some.url/aws/ec2_instances/1").
+         with(:body => "{\"joined\":true}",
+              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Content-Length'=>'15', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby', 'X-Auth-Token'=>'some_api_key'}).
+         to_return(:status => 500, :body => "", :headers => {})
+        expect{subject.handle_message(good_message_hash)}.to raise_error(RestClient::InternalServerError)
+      end
+    end 
   end
-
 end
-
