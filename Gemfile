@@ -1,10 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'daemons'
-gem 'aws-sdk'
-gem 'webmock'
-gem 'pantry_daemon_common', git: 'git@github.com:wongatech/pantry_daemon_common.git', tag: 'v0.1.1'
-gem 'rest-client'
+gem 'pantry_daemon_common', git: 'git@github.com:wongatech/pantry_daemon_common.git', tag: 'v0.1.7'
 
 group :development do
   gem 'guard-rspec'

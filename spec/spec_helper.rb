@@ -8,7 +8,6 @@ unless ENV["SKIP_COV"]
 end
 require 'spec_support/shared_daemons'
 require 'rspec/fire'
-require 'webmock/rspec'
 require 'aws-sdk'
 
 AWS.config :access_key_id=>"test", :secret_access_key=>"test"

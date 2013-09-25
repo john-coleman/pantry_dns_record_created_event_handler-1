@@ -1,14 +1,15 @@
 GIT
   remote: git@github.com:wongatech/pantry_daemon_common.git
-  revision: 7cf30fdf30083555fa0b2eb0e0cf5c51dc8da9a2
-  tag: v0.1.1
+  revision: 0feea3c0a4fc488b7eaacd5fe9de364fbdd52e34
+  tag: v0.1.7
   specs:
-    pantry_daemon_common (0.1.1)
+    pantry_daemon_common (0.1.7)
       aws-sdk
       daemons
       em-winrm
       net-ssh
       net-ssh-multi
+      rest-client
       syslogger
 
 GIT
@@ -24,19 +25,16 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.3.5)
     akami (1.2.0)
       gyoku (>= 0.4.0)
       nokogiri (>= 1.4.0)
-    aws-sdk (1.14.1)
+    aws-sdk (1.19.0)
       json (~> 1.4)
-      nokogiri (< 1.6.0)
+      nokogiri (>= 1.4.4, < 1.6.0)
       uuidtools (~> 2.1)
     builder (3.2.2)
     coderay (1.0.9)
     columnize (0.3.6)
-    crack (0.4.1)
-      safe_yaml (~> 0.9.0)
     daemons (1.1.9)
     debugger (1.6.1)
       columnize (>= 0.3.1)
@@ -77,10 +75,10 @@ GEM
       little-plugger (>= 1.1.3)
     lumberjack (1.0.4)
     method_source (0.8.2)
-    mime-types (1.23)
+    mime-types (1.25)
     mixlib-log (1.6.0)
     multi_json (1.7.8)
-    net-ssh (2.6.8)
+    net-ssh (2.7.0)
     net-ssh-gateway (1.2.0)
       net-ssh (>= 2.6.5)
     net-ssh-multi (1.2.0)
@@ -115,7 +113,6 @@ GEM
       rspec (~> 2.11)
     rspec-mocks (2.14.3)
     rubyntlm (0.1.1)
-    safe_yaml (0.9.5)
     savon (0.9.5)
       akami (~> 1.0)
       builder (>= 2.1.2)
@@ -136,9 +133,6 @@ GEM
     uuidtools (2.1.4)
     wasabi (1.0.0)
       nokogiri (>= 1.4.0)
-    webmock (1.13.0)
-      addressable (>= 2.2.7)
-      crack (>= 0.3.2)
     winrm (1.1.2)
       gssapi (~> 1.0.0)
       httpclient (~> 2.2.0.2)
@@ -152,17 +146,13 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  aws-sdk
-  daemons
   em-winrm!
   guard-bundler
   guard-rspec
   pantry_daemon_common!
   pry-debugger
   rake
-  rest-client
   rspec
   rspec-fire
   simplecov
   simplecov-rcov
-  webmock
