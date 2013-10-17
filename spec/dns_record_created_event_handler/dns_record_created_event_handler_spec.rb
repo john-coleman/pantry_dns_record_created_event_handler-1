@@ -1,56 +1,14 @@
 require 'spec_helper'
 require_relative  "../../dns_record_created_event_handler/dns_record_created_event_handler"
 describe Wonga::Daemon::DnsRecordCreatedEventHandler do
-  let(:config) {
-    {
-      "pantry" => {
-        "api_key" => "some_api_key",
-        "request_timeout" => 10,
-        "url" => "http://some.url"
-      }
-    }
-  }
-  let(:url) { config["pantry"]["url"] }
-  let(:api_key) { config["pantry"]["api_key"] }
-  let(:good_message_hash) {
-    {
-      "pantry_request_id" => 1,
-      "instance_id" => "i-f4819cb9"
-    }
-  }
+  let(:api_client) { instance_double('Wonga::Daemon::PantryApiClient').as_null_object }
   let(:logger) { instance_double('Logger').as_null_object }
-
-  subject { Wonga::Daemon::DnsRecordCreatedEventHandler.new(config, logger) }
-
+  subject { described_class.new(api_client, logger) }
+  let(:message) { { "pantry_request_id"=>40, "instance_id"=>"i-0123abcd" } }
   it_behaves_like "handler"
 
-  describe "#handle_message" do
-    before(:each) do
-      WebMock.reset!
-    end
-
-    context "HTTP200" do
-      it "Receives a correct SQS message and proceeds" do
-        WebMock.stub_request(:put, "#{url}/aws/ec2_instances/1").
-          with(:body => "{\"joined\":true,\"instance_id\":\"i-f4819cb9\"}",
-               :headers => {'Accept'=>'application/json',
-                            'Content-Type'=>'application/json',
-                            'X-Auth-Token'=>'some_api_key'}).
-                            to_return(:status => 200, :body => "", :headers => {})
-        expect(subject.handle_message(good_message_hash).code).to be 200
-      end
-    end
-
-    context "HTTP500" do
-      it "Receives an incorrect SQS message and raises an error" do
-        WebMock.stub_request(:put, "#{url}/aws/ec2_instances/1").
-          with(:body => "{\"joined\":true,\"instance_id\":\"i-f4819cb9\"}",
-               :headers => {'Accept'=>'application/json',
-                            'Content-Type'=>'application/json',
-                            'X-Auth-Token'=>'some_api_key'}).
-                            to_return(:status => 500, :body => "", :headers => {})
-        expect{subject.handle_message(good_message_hash)}.to raise_error(RestClient::InternalServerError)
-      end
-    end 
+  it "updates Pantry using PantryApiClient" do
+    expect(api_client).to receive(:send_put_request).with("/api/ec2_instances/40", { joined: true })
+    subject.handle_message(message)
   end
 end
