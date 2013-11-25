@@ -8,7 +8,7 @@ describe Wonga::Daemon::DnsRecordCreatedEventHandler do
   it_behaves_like "handler"
 
   it "updates Pantry using PantryApiClient" do
-    expect(api_client).to receive(:send_put_request).with("/api/ec2_instances/40", { joined: true })
+    expect(api_client).to receive(:send_put_request).with("/api/ec2_instances/40", { event: :create_dns_record, joined: true, dns: true })
     subject.handle_message(message)
   end
 end
