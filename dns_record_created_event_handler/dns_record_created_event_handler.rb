@@ -13,7 +13,6 @@ module Wonga
         message[:joined] = true
         message[:dns] = true
         @api_client.send_put_request("/api/ec2_instances/#{message["pantry_request_id"]}", message)
-        @logger.info "Updating dns created status for Request:#{message["pantry_request_id"]} succeeded"
       end
     end
   end
